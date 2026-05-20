@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Sustainability Journey — 15 Weeks</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Poppins (Headings) & Inter (Body) - Simple & Clean -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            scroll-snap-type: y proximity;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Light Orange/Cream Background */
+            background: #fff7ed; 
+            /* Dark Orange/Brown Text */
+            color: #7c2d12; 
+            overflow-x: hidden;
+        }
+
+        /* ── ambient background blobs (Orange Theme) ── */
+        .bg-blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .blob-1 {
+            width: 500px; height: 500px;
+            background: rgba(255, 237, 213, 0.7); /* Orange 200 */
+            top: -100px; left: -150px;
+            animation: blobDrift1 18s ease-in-out infinite alternate;
+        }
+        .blob-2 {
+            width: 400px; height: 400px;
+            background: rgba(253, 186, 116, 0.6); /* Orange 300 */
+            bottom: -80px; right: -120px;
+            animation: blobDrift2 22s ease-in-out infinite alternate;
+        }
+        .blob-3 {
+            width: 300px; height: 300px;
+            background: rgba(251, 146, 60, 0.15); /* Orange 500 transparent */
+            top: 40%; left: 50%;
+            animation: blobDrift3 15s ease-in-out infinite alternate;
+        }
+        @keyframes blobDrift1 {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(80px, 60px) scale(1.15); }
+        }
+        @keyframes blobDrift2 {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-60px, -80px) scale(1.2); }
+        }
+        @keyframes blobDrift3 {
+            0% { transform: translate(-50%, 0) scale(1); }
+            100% { transform: translate(-50%, -50px) scale(1.1); }
+        }
+
+        /* ── floating particles ── */
+        #particles { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0;
+            animation: floatUp linear infinite;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) translateX(0) scale(0); opacity: 0; }
+            10% { opacity: var(--p-opacity, 0.5); transform: translateY(-10vh) translateX(5px) scale(1); }
+            85% { opacity: calc(var(--p-opacity, 0.5) * 0.8); }
+            100% { transform: translateY(-105vh) translateX(var(--p-drift, -15px)) scale(0.4); opacity: 0; }
+        }
+
+        /* ── hero (New Simple Orange Intro) ── */
+        .hero {
+            min-height: 100vh;
+            scroll-snap-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            padding: 2rem;
+        }
+        .hero-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(3rem, 9vw, 5rem);
+            font-weight: 800;
+            /* Orange Gradient */
+            background: linear-gradient(135deg, #ea580c, #c2410c, #9a3412);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 5s ease infinite;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .hero-sub {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(1.25rem, 3vw, 1.75rem);
+            color: #9a3412;
+            margin-top: 1.5rem;
+            font-weight: 500;
+        }
+        .hero-deco {
+            color: #f97316;
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            letter-spacing: 0.2em;
+            opacity: 0.7;
+            font-weight: 600;
+        }
+        .scroll-cue {
+            position: absolute;
+            bottom: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+            color: #c2410c;
+            font-size: 0.9rem;
+            font-weight: 600;
+            animation: cueBounce 2.2s ease-in-out infinite;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .scroll-cue span {
+            display: block;
+            width: 18px; height: 28px;
+            border: 2px solid rgba(194, 65, 12, 0.4);
+            border-radius: 9px;
+            position: relative;
+        }
+        .scroll-cue span::after {
+            content: '';
+            position: absolute;
+            width: 3px; height: 7px;
+            background: #c2410c;
+            border-radius: 2px;
+            top: 5px; left: 50%;
+            transform: translateX(-50%);
+            animation: cueDot 2.2s ease-in-out infinite;
+        }
+        @keyframes cueBounce {
+            0%, 100% { transform: translateY(0); opacity: 0.7; }
+            50% { transform: translateY(8px); opacity: 1; }
+        }
+        @keyframes cueDot {
+            0% { top: 5px; opacity: 1; }
+            100% { top: 16px; opacity: 0; }
+        }
+
+        /* ── week sections ── */
+        .week-section {
+            min-height: 100vh;
+            scroll-snap-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem 1rem;
+            position: relative;
+            z-index: 2;
+            transition: all 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0.4;
+            transform: scale(0.95);
+            filter: blur(2px);
+        }
+        .week-section.active {
+            opacity: 1;
+            transform: scale(1);
+            filter: blur(0);
+        }
+        .week-section.near {
+            opacity: 0.7;
+            transform: scale(0.98);
+            filter: blur(1px);
+        }
+        .week-section.last-week {
+            min-height: auto;
+            padding: 2.5rem 1rem;
+            scroll-snap-align: start;
+        }
+
+        .week-card {
+            /* White Card with Orange Tint */
+            background: rgba(255, 255, 255, 0.85); 
+            border: 1px solid rgba(251, 146, 60, 0.25); 
+            border-radius: 1.5rem;
+            padding: 2rem;
+            max-width: 620px;
+            width: 100%;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: all 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 30px rgba(124, 45, 18, 0.08);
+        }
+        .week-section.active .week-card {
+            border-color: rgba(234, 88, 12, 0.5);
+            box-shadow: 0 15px 45px rgba(234, 88, 12, 0.12);
+            transform: translateY(-5px);
+        }
+        .week-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, transparent, #fdba74, #f97316, #fdba74, transparent);
+            opacity: 0;
+            transition: opacity 0.55s;
+        }
+        .week-section.active .week-card::before { opacity: 1; }
+
+        .week-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: #ffedd5;
+            color: #c2410c;
+            padding: 0.4rem 1rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            border: 1px solid #fed7aa;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-family: 'Poppins', sans-serif;
+        }
+        .week-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #7c2d12;
+            margin: 0.8rem 0 0.5rem;
+            line-height: 1.3;
+        }
+        .week-desc {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            color: #9a3412;
+            line-height: 1.6;
+        }
+
+        /* ── photo grid ── */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin: 1.25rem 0;
+        }
+        .photo-grid.cols-3 {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+        .photo-grid img {
+            width: 100%;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 1rem;
+            transition: transform 0.35s, filter 0.35s, box-shadow 0.35s;
+            filter: brightness(0.95) saturate(1.1);
+            background-color: #ffedd5;
+            cursor: pointer;
+            border: 2px solid #fff7ed;
+        }
+        .week-section.active .photo-grid img:hover {
+            transform: scale(1.05);
+            filter: brightness(1.1) saturate(1.2);
+            box-shadow: 0 8px 25px rgba(234, 88, 12, 0.25);
+            z-index: 10;
+        }
+
+        /* ── week 15 extras ── */
+        .reflection-box {
+            background: #fff7ed;
+            border-left: 4px solid #f97316;
+            border-radius: 0 1rem 1rem 0;
+            padding: 1rem 1.25rem;
+            margin-top: 1rem;
+        }
+        .reflection-label {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            color: #c2410c;
+            margin-bottom: 0.4rem;
+            font-weight: 600;
+        }
+        .reflection-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            color: #7c2d12;
+            line-height: 1.6;
+        }
+        .commitment-box {
+            margin-top: 1rem;
+        }
+        .commitment-label {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            color: #c2410c;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        .commitment-list {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem 1rem;
+        }
+        .commitment-list li {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: #7c2d12;
+            padding: 0.2rem 0 0.2rem 1.5rem;
+            position: relative;
+            line-height: 1.5;
+        }
+        .commitment-list li::before {
+            content: '🧡';
+            position: absolute;
+            left: 0;
+            font-size: 0.8rem;
+            top: 0.1rem;
+        }
+
+        /* ── side navigation dots ── */
+        .week-nav {
+            position: fixed;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 100;
+        }
+        .week-nav-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(194, 65, 12, 0.2);
+            transition: all 0.35s;
+            cursor: pointer;
+            border: none;
+            padding: 0;
+        }
+        .week-nav-dot:hover {
+            background: rgba(194, 65, 12, 0.6);
+        }
+        .week-nav-dot.active {
+            background: #ea580c;
+            box-shadow: 0 0 10px rgba(234, 88, 12, 0.4);
+            transform: scale(1.3);
+        }
+
+        /* ── footer ── */
+        .site-footer {
+            position: relative;
+            z-index: 2;
+            background: #ffedd5;
+            border-top: 2px solid #fed7aa;
+            padding: 3.5rem 1.5rem 2.5rem;
+            text-align: center;
+            min-height: 12vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+        }
+        .footer-deco {
+            color: #f97316;
+            font-size: 1rem;
+            letter-spacing: 0.3em;
+            opacity: 0.5;
+            font-weight: 700;
+        }
+        .footer-name {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            color: #7c2d12;
+            line-height: 1.4;
+            font-weight: 700;
+        }
+        .footer-copy {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: #9a3412;
+            margin-top: 0.2rem;
+            opacity: 0.8;
+        }
+        .footer-thanks {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: #ea580c;
+            margin-top: 0.5rem;
+            font-weight: 600;
+        }
+
+        /* ── LIGHTBOX / MODAL STYLES (Orange Theme) ── */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            /* Dark Orange Overlay */
+            background-color: rgba(69, 26, 3, 0.92); 
+            backdrop-filter: blur(8px);
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            cursor: zoom-out;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 85vh;
+            border-radius: 1rem;
+            box-shadow: 0 0 60px rgba(0,0,0,0.6);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            object-fit: contain;
+            border: 4px solid #fff7ed;
+        }
+
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 25px;
+            right: 30px;
+            color: #ffedd5;
+            font-size: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+            line-height: 1;
+            z-index: 2001;
+        }
+        .close-modal:hover { color: #fff; }
+
+        .modal-caption {
+            margin-top: 20px;
+            color: #fed7aa;
+            font-size: 1.5rem;
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        /* ── responsive ── */
+        @media (max-width: 640px) {
+            .week-card { padding: 1.5rem; }
+            .photo-grid img { height: 90px; }
+            .week-nav { right: 0.5rem; gap: 0.4rem; }
+            .week-nav-dot { width: 8px; height: 8px; }
+            .commitment-list { grid-template-columns: 1fr; }
+            .site-footer { padding: 2.5rem 1rem 2rem; }
+            .hero-title { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ambient blobs -->
+    <div class="bg-blob blob-1"></div>
+    <div class="bg-blob blob-2"></div>
+    <div class="bg-blob blob-3"></div>
+
+    <!-- floating particles -->
+    <div id="particles"></div>
+
+    <!-- side nav dots -->
+    <nav class="week-nav" id="weekNav" aria-label="Week navigation"></nav>
+
+    <main>
+        <!-- ═══════ HERO ═══════ -->
+        <section class="hero" id="heroSection">
+            <div class="hero-title">Sustainability Journey</div>
+            <p class="hero-sub">15 Weeks of Positive Impact 🌱</p>
+            <div class="hero-deco">⚡︎ 🌿 ⚡︎ 🌿 ⚡︎</div>
+            <div class="scroll-cue">
+                <span></span>
+                Explore
+            </div>
+        </section>
+
+        <!-- ═══════ WEEKS CONTAINER ═══════ -->
+        <div id="weeksContainer"></div>
+
+        <!-- ═══════ FOOTER ═══════ -->
+        <footer class="site-footer">
+            <div class="footer-deco">🌿 🌿 🌿</div>
+            <p class="footer-name">Jesebel E. Azores — BSIT 2A</p>
+            <p class="footer-copy">© 2026 Jesebel E. Azores. All Rights Reserved.</p>
+            <p class="footer-thanks">Created with care for the environment 🧡</p>
+        </footer>
+    </main>
+
+    <!-- ═══════ IMAGE MODAL ═══════ -->
+    <div id="imgModal" class="modal">
+        <span class="close-modal">&times;</span>
+        <img class="modal-content" id="modalImg">
+        <div id="caption" class="modal-caption"></div>
+    </div>
+
+<script>
+// ──────────────────────────────────────────
+//  WEEKS DATA (COMPLETE 15 WEEKS)
+// ──────────────────────────────────────────
+const weeks = [
+    {
+        week: 1,
+        title: "Community clean-up activity at the Barangay Hall of Brgy. Malaguining, Talalora, Samar",
+        desc: "I participated in a community clean-up activity at the Barangay Hall of Brgy. Malaguining. Throughout the week, we worked together as a community to sweep the surroundings, collect waste, and maintain the cleanliness of the area. The experience was both productive and meaningful, as it showed the value of teamwork and shared responsibility. Being part of this activity made me feel fulfilled, knowing that I contributed to creating a cleaner and healthier environment for everyone.",
+        photos: ["Azores/Week 1/Journal jesebel_20260519_4372436964694223759.png", "Week 1/image 3.png"]
+    },
+    {
+        week: 2,
+        title: "Campus sanitation activity at Malaguining Elementary School",
+        desc: "I participated in a campus sanitation activity at Malaguining Elementary School. During this activity, we worked together to clean the school grounds, pick up litter, and ensure the surroundings were neat and safe for learners. It was a meaningful experience that highlighted the importance of cleanliness, discipline, and cooperation. Being involved made me feel responsible and proud to contribute to a healthier school environment.",
+        photos: ["Azores/Week 2/Journal jesebel_20260519_7742741442375305332.png"]
+    },
+    {
+        week: 3,
+        title: "River maintenance and sanitation activity in Brgy. Malaguining, Talalora, Samar",
+        desc: "I took part in a riverbank clean-up activity in Brgy. Malaguining. During the activity, we cleaned the surroundings of the small river by collecting garbage, removing debris, and helping to improve the natural environment. It was a meaningful experience that taught me the importance of keeping waterways clean to prevent pollution and flooding. Working together with others made the activity easier and more effective, and it gave me a sense of responsibility and care for our community’s environment.",
+        photos: ["Azores/Week 3/Journal jesebel_20260519_6578325517646902693.png"]
+    },
+    {
+        week: 4,
+        title: "Street sweeping activity in Brgy. Malaguining, Talalora Samar",
+        desc: "I actively joined a street sweeping activity in Brgy. Malaguining. During the activity, we worked together to clean the roads by sweeping away dirt and collecting litter along the streets. It was a meaningful experience that helped maintain cleanliness and improve the surroundings of the community. Through this activity, I learned the importance of cooperation and taking responsibility in keeping our environment clean and safe for everyone.",
+        photos: ["Azores/Week 4/Journal jesebel_20260519_8283157499600375681.jpeg"]
+    },
+    {
+        week: 5,
+        title: "Cleaning and unclogging drainage canals",
+        desc: "I actively joined a cleaning and unclogging drainage canals activity in Brgy. Malaguining. During the activity, we worked together to remove trash, mud, and other debris that were blocking the drainage system. It was a meaningful experience that helped improve water flow and prevent possible flooding in the community. Through this activity, I learned the importance of proper waste disposal, teamwork, and maintaining a clean and safe environment for everyone.",
+        photos: ["Azores/Week 5/Journal jesebel_20260519_7157264489277360319.jpeg"]
+    },
+    {
+        week: 6,
+        title: "Coastal sanitation activity",
+        desc: "I actively joined a coastal clean-up activity in Brgy. Malaguining. During the activity, we cleaned the shoreline by collecting plastic waste, debris, and other rubbish along the seaside. It was a meaningful experience that helped protect the marine environment and keep the coast clean. Through this activity, I learned the importance of environmental care, teamwork, and proper waste management in preserving our natural resources.",
+        photos: ["Azores/Week 6/Journal jesebel_20260519_4903839829102403884.jpeg"]
+    },
+    {
+        week: 7,
+        title: "Constructing a waste container",
+        desc: "I took part in a waste bin making activity in Malaguining Elementary School. During the activity, we used available materials to create a functional trash bin that can be used in the school and community. It was a meaningful experience that taught me creativity, teamwork, and the importance of proper waste management. Through this activity, I learned how small efforts can help promote cleanliness and environmental care.",
+        photos: ["Azores/Week 7/Journal jesebel_20260519_3335960650872798344.png"]
+    },
+    {
+        week: 8,
+        title: "DIY waste bin project for the community",
+        desc: "I actively joined a DIY waste bin project for the community in Brgy. Malaguining. During the activity, we created and assembled waste bins using available and recycled materials to support proper waste disposal in the area. It was a meaningful experience that promoted creativity, teamwork, and environmental responsibility. Through this project, I learned the importance of managing waste properly and contributing simple solutions for a cleaner and more organized community.",
+        photos: ["Azores/Week 8/Journal jesebel_20260519_5040829487257282469.jpeg"]
+    },
+    {
+        week: 9,
+        title: "Garbage segregation activity",
+        desc: "I actively joined a waste segregation activity in Brgy. Malaguining. During the activity, we sorted different types of garbage such as biodegradable and non-biodegradable waste to promote proper waste management in the community. It was a meaningful experience that taught me discipline, responsibility, and the importance of keeping our surroundings clean. Through this activity, I learned how proper waste segregation helps protect the environment and improve community health.",
+        photos: ["Azores/Week 9/Journal jesebel_20260519_1307979123583332784.jpeg"]
+    },
+    {
+        week: 10,
+        title: "Tree planting activity",
+        desc: "I took part in a tree planting activity in Brgy. Malaguining. During the activity, we planted young trees in designated areas to help improve the environment and support reforestation efforts. It was a meaningful experience that promoted teamwork, responsibility, and care for nature. Through this activity, I learned the importance of trees in providing clean air, preventing soil erosion, and protecting the environment for future generations.",
+        photos: ["Azores/Week 10/Journal jesebel_20260519_8081469389084661045.png"]
+    },
+    {
+        week: 11,
+        title: "Giving away pre-loved clothes",
+        desc: "I gathered all my used clothes and took part in a clothes donation activity in Brgy. Malaguining. During the activity, I shared used clothing with families in need within the community. It was a meaningful experience that promoted kindness, generosity, and compassion. Through this activity, I learned the value of helping others and how simple acts of sharing can greatly impact the lives of those in need.",
+        photos: ["Azores/Week 11/Journal jesebel_20260519_2605904165290826019.png"]
+    },
+    {
+        week: 12,
+        title: "Feeding Program in school",
+        desc: "I actively took part in a school feeding activity at Malaguining Elementary School. During the program, we helped prepare and distribute nutritious meals to learners to support their health and daily energy needs. It was a meaningful experience that promoted cooperation, care, and service within the school community. Through this activity, I learned the importance of proper nutrition in helping students stay healthy, focused, and ready to learn.",
+        photos: ["Azores/Week 12/Journal jesebel_20260519_228138738648000221.png"]
+    },
+    {
+        week: 13,
+        title: "Community garden activity ",
+        desc: "I actively took part in a community gardening activity in Brgy. Malaguining. During the activity, we planted vegetables and helped maintain a shared garden for the community. It was a meaningful experience that promoted teamwork, patience, and responsibility. Through this activity, I learned the importance of growing food, caring for plants, and working together to support a sustainable and healthy community.",
+        photos: ["Azores/Week 13/Journal jesebel_20260519_5647468989969134656.jpeg",]
+    },
+    {
+        week: 14,
+        title: "Clean-up drive at the Barangay Gymnasium",
+        desc: "I took part in a clean-up drive at the Barangay Gymnasium of Brgy. Malaguining. During the activity, we cleaned the surroundings by sweeping floors, collecting trash, and organizing the area to make it neat and presentable. It was a meaningful experience that promoted teamwork, discipline, and responsibility. Through this activity, I learned the importance of maintaining cleanliness in public places to ensure a safe and pleasant environment for everyone.",
+        photos: ["Azores/Week 14/Journal jesebel_20260519_2844291994682931177.jpeg"]
+    },
+    {
+        week: 15,
+        title: "Relief goods packing and distribution",
+        desc: "I participated in a relief goods packing and distribution activity in Brgy. Malaguining. During the activity, we helped pack essential items and distribute them to families in need within the community. It was a meaningful experience that promoted compassion, teamwork, and service. Through this activity, I learned the importance of helping others during difficult times and the value of being ready to support those in need.",
+        photos: ["Azores/Week 15/Journal jesebel_20260519_3541529954798036479.jpeg", "Week 15/image 4.jpg"]
+    }
+];
+
+// ──────────────────────────────────────────
+//  RENDER WEEK SECTIONS
+// ──────────────────────────────────────────
+const container = document.getElementById('weeksContainer');
+
+weeks.forEach((w, i) => {
+    const section = document.createElement('section');
+    const isLast = w.week === 15;
+    section.className = 'week-section' + (isLast ? ' last-week' : '');
+    section.id = `week-${w.week}`;
+    section.setAttribute('data-week', w.week);
+
+    const photoClass = isLast ? 'photo-grid cols-3' : 'photo-grid';
+
+    let photosHTML = w.photos.map(photo =>
+    `<img src="${photo}" alt="Week ${w.week} documentation" loading="lazy" onerror="this.onerror=null; this.src='https://picsum.photos/seed/orange${w.week}/200/300.jpg'; this.alt='Image not found in ${photo}';">`
+    ).join('');
+
+    let extrasHTML = '';
+    if (w.reflection) {
+        extrasHTML += `
+            <div class="reflection-box">
+                <div class="reflection-label">🧡 My Reflection</div>
+                <p class="reflection-text">${w.reflection}</p>
+            </div>`;
+    }
+    if (w.commitments) {
+        const items = w.commitments.map(c => `<li>${c}</li>`).join('');
+        extrasHTML += `
+            <div class="commitment-box">
+                <div class="commitment-label">✨ Habit Commitments</div>
+                <ul class="commitment-list">${items}</ul>
+            </div>`;
+    }
+
+    section.innerHTML = `
+        <div class="week-card">
+            <div class="week-badge">Week ${w.week}</div>
+            <h2 class="week-title">${w.title}</h2>
+            <div class="${photoClass}">${photosHTML}</div>
+            <p class="week-desc">${w.desc}</p>
+            ${extrasHTML}
+        </div>
+    `;
+
+    container.appendChild(section);
+});
+
+// ──────────────────────────────────────────
+//  SIDE NAVIGATION DOTS
+// ──────────────────────────────────────────
+const nav = document.getElementById('weekNav');
+const allSections = [document.getElementById('heroSection'), ...document.querySelectorAll('.week-section')];
+
+allSections.forEach((sec, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'week-nav-dot';
+    dot.setAttribute('aria-label', i === 0 ? 'Hero' : `Week ${i}`);
+    dot.addEventListener('click', () => sec.scrollIntoView({ behavior: 'smooth' }));
+    nav.appendChild(dot);
+});
+
+const dots = nav.querySelectorAll('.week-nav-dot');
+
+// ──────────────────────────────────────────
+//  SCROLL EMPHASIS LOGIC
+// ──────────────────────────────────────────
+const weekSections = document.querySelectorAll('.week-section');
+
+function updateEmphasis() {
+    const vpCenter = window.innerHeight / 2;
+    let activeIdx = -1;
+    let minDist = Infinity;
+
+    allSections.forEach((sec, i) => {
+        const rect = sec.getBoundingClientRect();
+        const center = rect.top + rect.height / 2;
+        const dist = Math.abs(center - vpCenter);
+        if (dist < minDist) {
+            minDist = dist;
+            activeIdx = i;
+        }
+    });
+
+    dots.forEach((d, i) => d.classList.toggle('active', i === activeIdx));
+
+    weekSections.forEach(sec => {
+        const rect = sec.getBoundingClientRect();
+        const center = rect.top + rect.height / 2;
+        const dist = Math.abs(center - vpCenter);
+        const threshold = window.innerHeight * 0.4;
+
+        sec.classList.remove('active', 'near');
+        if (dist < threshold * 0.5) {
+            sec.classList.add('active');
+        } else if (dist < threshold) {
+            sec.classList.add('near');
+        }
+    });
+}
+
+window.addEventListener('scroll', updateEmphasis, { passive: true });
+window.addEventListener('resize', updateEmphasis);
+updateEmphasis();
+
+// ──────────────────────────────────────────
+//  FLOATING PARTICLES (Orange Theme)
+// ──────────────────────────────────────────
+const particleContainer = document.getElementById('particles');
+// Warm Orange/Amber Colors
+const particleColors = [
+    'rgba(124, 45, 18, 0.9)',   /* Orange 900 - Dark Brown/Orange */
+    'rgba(194, 65, 12, 0.8)',   /* Orange 600 - Strong Orange */
+    'rgba(234, 88, 12, 0.8)',   /* Orange 500 - Bright Orange */
+    'rgba(249, 115, 22, 0.8)',  /* Orange 500 - Standard */
+];
+
+function createParticle() {
+    const p = document.createElement('div');
+    p.className = 'particle';
+
+    // Size 3px to 9px
+    const size = Math.random() * 6 + 3;
+    const left = Math.random() * 100;
+    const dur = Math.random() * 14 + 10;
+    const delay = Math.random() * 8;
+    const color = particleColors[Math.floor(Math.random() * particleColors.length)];
+    const drift = (Math.random() - 0.5) * 60;
+    // Opacity 0.5 to 0.8
+    const opacity = Math.random() * 0.3 + 0.5;
+
+    p.style.cssText = `
+        width: ${size}px;
+        height: ${size}px;
+        left: ${left}%;
+        bottom: -10px;
+        background: ${color};
+        box-shadow: 0 0 ${size * 2}px ${color};
+        animation-duration: ${dur}s;
+        animation-delay: ${delay}s;
+        --p-drift: ${drift}px;
+        --p-opacity: ${opacity};
+    `;
+
+    particleContainer.appendChild(p);
+}
+
+for (let i = 0; i < 30; i++) createParticle();
+
+// ──────────────────────────────────────────
+//  IMAGE MODAL LOGIC (LIGHTBOX)
+// ──────────────────────────────────────────
+const modal = document.getElementById("imgModal");
+const modalImg = document.getElementById("modalImg");
+const captionText = document.getElementById("caption");
+const closeModal = document.querySelector(".close-modal");
+
+// Attach click event to all images in the grid
+document.querySelectorAll('.photo-grid img').forEach(img => {
+    img.addEventListener('click', function() {
+        modal.classList.add('show');
+        modalImg.src = this.src;
+        
+        captionText.innerHTML = this.alt.replace(" documentation", "");
+        document.body.style.overflow = "hidden"; 
+    });
+});
+
+function hideModal() {
+    modal.classList.remove('show');
+    document.body.style.overflow = "auto"; 
+}
+
+closeModal.addEventListener('click', hideModal);
+
+modal.addEventListener('click', function(e) {
+    if (e.target === modal) {
+        hideModal();
+    }
+});
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === "Escape" && modal.classList.contains('show')) {
+        hideModal();
+    }
+});
+</script>
+</body>
+</html>
